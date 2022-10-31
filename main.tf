@@ -109,6 +109,16 @@ resource "aws_elasticsearch_domain" "es_domain" {
     }
   }
 
+  # auto_tune_options
+  dynamic "auto_tune_options" {
+    for_each = local.auto_tune_options
+    content {
+      desired_state        = lookup(auto_tune_options.value, "desired_state")
+      maintenance_schedule = lookup(auto_tune_options.value, "maintenance_schedule")
+      rollback_on_disable  = lookup(auto_tune_options.value, "rollback_on_disable")
+    }
+  }
+
   # vpc_options
   dynamic "vpc_options" {
     for_each = local.vpc_options
@@ -254,6 +264,16 @@ locals {
   }
 
   snapshot_options = [local.snapshot_options_default]
+
+  # auto_tune_options
+  # If no auto_tune_options list is provided, build a auto_tune_options using the default values
+  auto_tune_options_default = {
+    desired_state        = lookup(var.auto_tune_options, "desired_state", null) == null ? var.auto_tune_options_desired_state : lookup(var.auto_tune_options, "desired_state")
+    rollback_on_disable  = lookup(var.auto_tune_options, "rollback_on_disable", null) == null ? var.auto_tune_options_rollback_on_disable : lookup(var.auto_tune_options, "rollback_on_disable")
+    maintenance_schedule = lookup(var.auto_tune_options, "maintenance_schedule", null) == null ? var.auto_tune_options_maintenance_schedule : lookup(var.auto_tune_options, "maintenance_schedule")
+  }
+
+  auto_tune_options = [local.auto_tune_options_default]
 
   # vpc_options
   # If no vpc_options list is provided, build a vpc_options using the default values

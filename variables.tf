@@ -272,6 +272,31 @@ variable "snapshot_options_automated_snapshot_start_hour" {
   default     = 0
 }
 
+# auto_tune_options
+variable "auto_tune_options" {
+  description = "auto tuning releated options"
+  type        = any
+  default     = {}
+}
+
+variable "auto_tune_options_desired_state" {
+  description = "enable automatic tuning schedule for the cluster. values: ENABLED or DISABLED"
+  type        = string
+  default     = "DISABLED"
+}
+
+variable "auto_tune_options_rollback_on_disable" {
+  description = "(Optional) Whether to roll back to default Auto-Tune settings when disabling Auto-Tune. Valid values: DEFAULT_ROLLBACK or NO_ROLLBACK"
+  type        = string
+  default     = ""
+}
+
+variable "auto_tune_options_maintenance_schedule" {
+  description = "enable automatic tuning schedule for the cluster. values: ENABLED or DISABLED"
+  type        = any
+  default     = {}
+}
+
 # vpc_options
 variable "vpc_options" {
   description = "VPC related options, see below. Adding or removing this configuration forces a new resource"
